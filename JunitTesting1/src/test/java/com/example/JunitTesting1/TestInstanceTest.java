@@ -3,9 +3,10 @@ package com.example.JunitTesting1;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
@@ -16,6 +17,8 @@ PER_CLASS allows shared state and non-static @BeforeAll methods.
 */
 
 public class TestInstanceTest {
+
+    Calculator cal = new Calculator();
 
     public TestInstanceTest() {
         System.out.println("HI");
@@ -37,4 +40,15 @@ public class TestInstanceTest {
 //        assert randomNumber >= 0 && randomNumber < 10 : "Random number is out of range: " + randomNumber;
         assertTrue(randomNumber >= 0 && randomNumber < 10, "Random number is out of range: " + randomNumber);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "3, 2, 6",
+            "4, 5, 20"
+    })
+    void multiplyTest(int a, int b, int expected) {
+        assertEquals(expected, cal.multiply(a, b));
+    }
+
+    
 }
