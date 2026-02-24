@@ -50,5 +50,5 @@ public class TestInstanceTest {
         assertEquals(expected, cal.multiply(a, b));
     }
 
-    
+
 }
