@@ -1,11 +1,17 @@
 package com.example.JunitTesting1;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CalculatorTesting {
-    private static Calculator cal = new Calculator();
+    private static Calculator cal;
+
+    @BeforeEach
+    public void createObject() {
+            cal = new Calculator();
+    }
 
     @Test
     public void testAdd() {
