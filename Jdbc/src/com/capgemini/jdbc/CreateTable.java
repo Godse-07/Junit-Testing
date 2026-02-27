@@ -25,7 +25,10 @@ public class CreateTable {
 //                insertUsingStatement(conn);
 //                insertUsingPreparedStatement(conn);
 //                insertDynamicUnsafe(conn);
-                insertDynamicSafe(conn);
+//                insertDynamicSafe(conn);
+//                updateData(conn);
+//                updateData(conn);
+                deleteData(conn);
                 fetchData(conn);
             } catch (Exception e) {
                 System.out.println("Connection failed: " + e.getMessage());
@@ -87,24 +90,27 @@ public class CreateTable {
 
     // 5. Dynamic Insert (Safe)
     public static void insertDynamicSafe(Connection conn) throws SQLException {
-
         Scanner sc = new Scanner(System.in);
+        System.out.println("How many records do you want to insert? ");
+        int n = sc.nextInt();
+        sc.nextLine();
+        for(int i=0; i<n; i++) {
+            System.out.println("Enter Name (Safe Insert): ");
+            String name = sc.nextLine();
 
-        System.out.println("Enter Name (Safe Insert): ");
-        String name = sc.nextLine();
+            System.out.println("Enter Email: ");
+            String email = sc.nextLine();
 
-        System.out.println("Enter Email: ");
-        String email = sc.nextLine();
+            String sql = "INSERT INTO users(name,email) VALUES(?,?)";
 
-        String sql = "INSERT INTO users(name,email) VALUES(?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setString(2, email);
 
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, name);
-        pstmt.setString(2, email);
+            pstmt.executeUpdate();
 
-        pstmt.executeUpdate();
-
-        System.out.println("Inserted (Safe)");
+            System.out.println("Inserted (Safe)");
+        }
     }
 
     // 6. Fetch Data
@@ -124,6 +130,72 @@ public class CreateTable {
                             rs.getString("email")
             );
         }
+    }
+
+    // 7. Update Data
+    public static void updateData(Connection conn) throws SQLException {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Enter user id: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        String selectSql = "SELECT name, email FROM users WHERE id = ?";
+        PreparedStatement selectStmt = conn.prepareStatement(selectSql);
+        selectStmt.setInt(1, id);
+
+        ResultSet rs = selectStmt.executeQuery();
+
+        if (!rs.next()) {
+            System.out.println("User not found!");
+            return;
+        }
+
+        String currentName = rs.getString("name");
+        String currentEmail = rs.getString("email");
+
+        System.out.println("Enter new name (press Enter to keep same): ");
+        String name = sc.nextLine();
+
+        System.out.println("Enter new email (press Enter to keep same): ");
+        String email = sc.nextLine();
+
+        if (name.isEmpty()) {
+            name = currentName;
+        }
+
+        if (email.isEmpty()) {
+            email = currentEmail;
+        }
+
+
+        String updateSql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        PreparedStatement updateStmt = conn.prepareStatement(updateSql);
+
+        updateStmt.setString(1, name);
+        updateStmt.setString(2, email);
+        updateStmt.setInt(3, id);
+
+        int rows = updateStmt.executeUpdate();
+
+        if (rows > 0) {
+            System.out.println("User updated successfully!");
+        } else {
+            System.out.println("Update failed!");
+        }
+    }
+
+    // 8. Delete Data
+    public static void deleteData(Connection conn) throws SQLException {
+        System.out.println("Enter the id of the user to delete: ");
+        Scanner sc = new Scanner(System.in);
+        int id = sc.nextInt();
+
+        String sql = "DELETE FROM users WHERE id = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, id);
+        pstmt.executeUpdate();
     }
 
 }
