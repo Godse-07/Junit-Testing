@@ -3,7 +3,7 @@ import java.util.List;
 
 public class NumberKeypad {
     static void run() {
-        String str = "23";
+        String str = "34";
         List<String> result = solve(str);
         System.out.println(result);
     }
