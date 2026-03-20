@@ -1,4 +1,4 @@
-package com.pushan.restapis.Student_Course.Configuration;
+package com.pushan.restapis.Employee_address.Configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

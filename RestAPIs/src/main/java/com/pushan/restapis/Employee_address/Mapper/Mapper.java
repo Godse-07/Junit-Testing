@@ -1,4 +1,4 @@
-package com.pushan.restapis.Student_Course.Mapper;
+package com.pushan.restapis.Employee_address.Mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,5 +12,4 @@ public class Mapper {
     public <D, T> D map(T entity, Class<D> outClass) {
         return mapper.map(entity, outClass);
     }
-
 }
